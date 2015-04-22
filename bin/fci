@@ -13,7 +13,7 @@ include GLI::App
 
 program_desc 'Describe your application here'
 
-version Fci::VERSION
+version FCI::VERSION
 
 subcommand_option_handling :normal
 arguments :strict

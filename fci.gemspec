@@ -2,12 +2,12 @@
 require File.join([File.dirname(__FILE__),'lib','fci','version.rb'])
 spec = Gem::Specification.new do |s|
   s.name = 'fci'
-  s.version = Fci::VERSION
-  s.author = 'Your Name Here'
-  s.email = 'your@email.address.com'
-  s.homepage = 'http://your.website.com'
+  s.version = FCI::VERSION
+  s.author = 'Anton Maminov'
+  s.email = 'anton.maminov@gmail.com'
+  s.homepage = 'https://github.com/mamantoha/fci'
   s.platform = Gem::Platform::RUBY
-  s.summary = 'A description of your project'
+  s.summary = 'Freshdesk and Crowdin integration Command Line Interface (CLI)'
   s.files = `git ls-files`.split("
 ")
   s.require_paths << 'lib'
