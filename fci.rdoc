@@ -1,0 +1,5 @@
+= fci
+
+Generate this with
+    fci rdoc
+After you have described your command line interface
