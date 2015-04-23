@@ -2,9 +2,12 @@ PATH
   remote: .
   specs:
     fci (0.0.1)
+      byebug
       crowdin-api
       freshdesk_api
       gli (= 2.13.0)
+      nokogiri
+      rubyzip
 
 PATH
   remote: ../freshdesk_api_client_rb
@@ -29,8 +32,11 @@ GEM
       cucumber (>= 1.1.1)
       rspec-expectations (>= 2.7.0)
     builder (3.2.2)
+    byebug (4.0.5)
+      columnize (= 0.9.0)
     childprocess (0.5.6)
       ffi (~> 1.0, >= 1.0.11)
+    columnize (0.9.0)
     crowdin-api (0.2.8)
       rest-client (~> 1.6.8)
     cucumber (2.0.0)
@@ -51,9 +57,12 @@ GEM
     i18n (0.7.0)
     json (1.8.2)
     mime-types (1.25.1)
+    mini_portile (0.6.2)
     minitest (5.6.0)
     multi_json (1.11.0)
     multi_test (0.1.2)
+    nokogiri (1.6.6.2)
+      mini_portile (~> 0.6.0)
     rake (10.4.2)
     rdoc (4.2.0)
     rest-client (1.6.8)
@@ -63,6 +72,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.2.0)
     rspec-support (3.2.2)
+    rubyzip (1.1.7)
     thread_safe (0.3.5)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)

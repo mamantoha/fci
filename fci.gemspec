@@ -16,6 +16,9 @@ spec = Gem::Specification.new do |s|
   s.rdoc_options << '--title' << 'fci' << '--main' << 'README.rdoc' << '-ri'
   s.bindir = 'bin'
   s.executables << 'fci'
+  s.add_runtime_dependency('nokogiri')
+  s.add_runtime_dependency('rubyzip')
+  s.add_runtime_dependency('byebug')
   s.add_runtime_dependency('crowdin-api')
   s.add_runtime_dependency('freshdesk_api')
   s.add_development_dependency('rake')

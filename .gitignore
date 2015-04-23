@@ -8,6 +8,7 @@
 /test/tmp/
 /test/version_tmp/
 /tmp/
+/fci.yml
 
 ## Specific to RubyMotion:
 .dat*
