@@ -10,6 +10,7 @@ rescue LoadError
 end
 
 include GLI::App
+include FCI
 
 program_desc 'is a command line tool that allows you to manage and synchronize your Freshdesk localization with Crowdin project'
 
@@ -44,7 +45,7 @@ pre do |global, command, options, args|
 
   # load project-specific configuration
   begin
-    @config = YAML.load(File.read(global[:config])) || {}
+    @fci_config = YAML.load(File.read(global[:config])) || {}
   rescue Psych::SyntaxError => err
     exit_now! <<-EOS
       Could not parse YAML: #{err.message}
@@ -52,12 +53,12 @@ pre do |global, command, options, args|
   end
 
   @freshdesk = FreshdeskAPI::Client.new do |c|
-    c.base_url = @config['freshdesk_base_url']
-    c.username = @config['freshdesk_username']
-    c.password = @config['freshdesk_password']
+    c.base_url = @fci_config['freshdesk_base_url']
+    c.username = @fci_config['freshdesk_username']
+    c.password = @fci_config['freshdesk_password']
   end
 
-  @crowdin = Crowdin::API.new(api_key: @config['crowdin_api_key'], project_id: @config['crowdin_project_id'], base_url: @config['crowdin_base_url'])
+  @crowdin = Crowdin::API.new(api_key: @fci_config['crowdin_api_key'], project_id: @fci_config['crowdin_project_id'], base_url: @fci_config['crowdin_base_url'])
 
   true
 end

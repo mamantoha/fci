@@ -22,15 +22,15 @@ freshdesk_base_url: 'https://<%subdomain%>.freshdesk.com'
 freshdesk_username: '<%your-freshdek-username%>'
 freshdesk_password: = '<%your-freshdesk-password%>'
 
-category: '<%category-id%>'
+freshdesk_category: '<%category-id%>'
 
 translations:
   -
-    language: '<%crowdin-two-letters-code%>'
-    id: '<%freshdesk-category-id%>'
+    crowdin_language_code: '<%crowdin-two-letters-code%>'
+    freshdesk_category_id: '<%freshdesk-category-id%>'
   -
-    language: '<%crowdin-two-letters-code%>'
-    id: '<%freshdesk-category-id%>'
+    crowdin_language_code: '<%crowdin-two-letters-code%>'
+    freshdesk_category_id: '<%freshdesk-category-id%>'
 
 ```
 

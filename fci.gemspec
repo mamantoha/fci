@@ -8,8 +8,7 @@ spec = Gem::Specification.new do |s|
   s.homepage = 'https://github.com/mamantoha/fci'
   s.platform = Gem::Platform::RUBY
   s.summary = 'Freshdesk and Crowdin integration Command Line Interface (CLI)'
-  s.files = `git ls-files`.split("
-")
+  s.files = `git ls-files`.split("\n")
   s.require_paths << 'lib'
   s.has_rdoc = true
   s.extra_rdoc_files = ['README.rdoc','fci.rdoc']
