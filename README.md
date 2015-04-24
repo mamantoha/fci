@@ -1,4 +1,4 @@
-= fci
+# fci
 
 Describe your project here
 
@@ -33,6 +33,3 @@ translations:
     freshdesk_category_id: '<%freshdesk-category-id%>'
 
 ```
-
-:include:fci.rdoc
-
