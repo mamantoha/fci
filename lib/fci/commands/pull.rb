@@ -56,11 +56,29 @@ command :pull do |c|
           # if Folder translation ID exists in config
           if folder_translation = config_folder[:translations].detect { |t| t[:lang] == lang['crowdin_language_code'] }
             # Get folder from Freshdesk and update it
-            freshdesk_folder = FreshdeskAPI::SolutionFolder.find!(
+            freshdesk_folder = FreshdeskAPI::SolutionFolder.find(
               @freshdesk,
               category_id: lang['freshdesk_category_id'].to_i,
               id: folder_translation[:id]
             )
+
+            # Remove Folder translation from config it it not found in Freshdesk
+            if freshdesk_folder.nil?
+              puts "Remove undefined Folder from config"
+              config_folder[:translations].delete_if { |tr| tr[:lang] == lang['crowdin_language_code'] }
+
+              puts "[Freshdesk] Create new Folder"
+              freshdesk_folder = FreshdeskAPI::SolutionFolder.create!(
+                @freshdesk,
+                category_id: lang['freshdesk_category_id'].to_i,
+                name: folder[:name],
+                description: folder[:description],
+                visibility: 1
+              )
+
+              config_folder[:translations] << { lang: lang['crowdin_language_code'], id: freshdesk_folder.id }
+
+            end
 
             unless freshdesk_folder.attributes[:name] == folder[:name] || freshdesk_folder.attributes[:description] == folder[:description]
               puts "[Freshdesk] Update existing Folder"
