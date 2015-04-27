@@ -74,7 +74,7 @@ crowdin_base_url: 'https://api.crowdin.com'
 
 freshdesk_base_url: 'https://<%subdomain%>.freshdesk.com'
 freshdesk_username: '<%your-freshdek-username%>'
-freshdesk_password: = '<%your-freshdesk-password%>'
+freshdesk_password: '<%your-freshdesk-password%>'
 
 freshdesk_category: '<%category-id%>'
 
