@@ -12,7 +12,7 @@ command :push do |c|
         f.write config.to_yaml
       end
     end
-    
+
     # for store information about folders/articles ids
     config = YAML.load(File.open(config_file))
 
