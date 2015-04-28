@@ -1,5 +1,4 @@
 desc 'Build and download latest translations from Crowdin'
-arg_name 'Describe arguments to init here'
 command :download do |c|
   c.action do |global_options, options, args|
     language = 'all'
