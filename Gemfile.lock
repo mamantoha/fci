@@ -16,7 +16,7 @@ PATH
       activesupport
       deep_merge
       multi_json
-      rest-client (~> 1.6.8)
+      rest-client
 
 GEM
   remote: https://rubygems.org/

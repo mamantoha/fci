@@ -1,17 +1,27 @@
-desc 'Build and download latest translations from Crowdin'
+desc 'Build and download last exported translation resources from Crowdin'
 command :download do |c|
+  c.desc 'Directory of resource files'
+  c.long_desc <<-EOS.strip_heredoc
+    This is the directory where the project's files will be store.
+  EOS
+  c.default_value 'resources'
+  c.arg_name 'dir'
+  c.flag [:resource_dir]
+
   c.action do |global_options, options, args|
     language = 'all'
     tempfile = Tempfile.new(language)
     zipfile_name = tempfile.path
+    resource_dir = options[:resource_dir]
 
+    base_path = File.join(Dir.pwd, resource_dir)
     begin
       export_translations!(@crowdin)
 
       puts 'Downloading translations'
       @crowdin.download_translation(language, output: zipfile_name)
 
-      base_path = Dir.pwd
+      base_path = File.join(Dir.pwd, resource_dir)
       unzip_file_with_translations(zipfile_name, base_path)
     ensure
       tempfile.close

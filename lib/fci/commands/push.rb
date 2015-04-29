@@ -1,6 +1,18 @@
-desc 'Read from Freshdesk and upload to Crowdin'
+desc 'Read folders/articles from Freshdesk and upload resource files to Crowdin'
 command :push do |c|
+  c.desc 'Directory of resource files'
+  c.long_desc <<-EOS.strip_heredoc
+    This is the directory where the project's files will be store.
+  EOS
+  c.default_value 'resources'
+  c.arg_name 'dir'
+  c.flag [:resource_dir]
+
   c.action do |global_options, options, args|
+    resource_dir = options[:resource_dir]
+    unless File.exists?(resource_dir)
+      FileUtils.mkdir(resource_dir)
+    end
     config_file = '.config.yml'
 
     File.open(config_file, 'a+') do |f|
@@ -23,6 +35,7 @@ command :push do |c|
     raise('No such category') unless source_category.id == source_category_id
 
     # Get category's folders in Freshdesk
+    puts "[Freshdesk] Get folders for Category with id #{source_category_id}"
     folders = @freshdesk.solution_folders(category_id: source_category_id).all!
 
     folders_builder = []
@@ -45,6 +58,7 @@ command :push do |c|
     # Get folders articles
     articles_builder = []
     folders.each do |folder|
+      puts "[Freshdesk] Get articles for Folder with id #{folder.id}"
       articles = @freshdesk.solution_articles(category_id: source_category_id, folder_id: folder.id).all!
 
       articles.each do |article|
@@ -70,7 +84,7 @@ command :push do |c|
     folders_builder.each do |folder|
       file_name = "folder_#{folder[:id]}.xml"
 
-      o = File.new(file_name, 'w')
+      o = File.new(File.join(resource_dir, file_name), 'w')
       o.write folder[:xml].to_xml
       o.close
 
@@ -78,14 +92,14 @@ command :push do |c|
         puts "[Crowdin] Update file `#{file_name}`"
         @crowdin.update_file(
           files = [
-            { dest: file_name, source: file_name, export_pattert: '/%two_letters_code%/%original_file_name%' }
+            { source: File.join(resource_dir, file_name), dest: file_name, export_pattert: '/%two_letters_code%/%original_file_name%' }
           ], type: 'webxml'
         )
       else
         puts "[Crowdin] Add file `#{file_name}`"
         @crowdin.add_file(
           files = [
-            { dest: file_name, source: file_name, export_pattert: '/%two_letters_code%/%original_file_name%' }
+            { source: File.join(resource_dir, file_name), dest: file_name, export_pattert: '/%two_letters_code%/%original_file_name%' }
           ], type: 'webxml'
         )
       end
@@ -95,7 +109,7 @@ command :push do |c|
     articles_builder.each do |article|
       file_name = "article_#{article[:id]}.xml"
 
-      o = File.new(file_name, 'w')
+      o = File.new(File.join(resource_dir, file_name), 'w')
       o.write article[:xml].to_xml
       o.close
 
@@ -103,14 +117,14 @@ command :push do |c|
         puts "[Crowdin] Update file `#{file_name}`"
         @crowdin.update_file(
           files = [
-            { dest: file_name, source: file_name, export_pattert: '/%two_letters_code%/%original_file_name%' }
+            { source: File.join(resource_dir, file_name), dest: file_name, export_pattert: '/%two_letters_code%/%original_file_name%' }
           ], type: 'webxml'
         )
       else
         puts "[Crowdin] Add file `#{file_name}`"
         @crowdin.add_file(
           files = [
-            { dest: file_name, source: file_name, export_pattert: '/%two_letters_code%/%original_file_name%' }
+            { source: File.join(resource_dir, file_name), dest: file_name, export_pattert: '/%two_letters_code%/%original_file_name%' }
           ], type: 'webxml'
         )
 

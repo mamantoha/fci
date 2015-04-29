@@ -8,7 +8,7 @@ module FCI
         # `f' - relative path in archive
         fpath = File.join(dest_path, f.name)
         FileUtils.mkdir_p(File.dirname(fpath))
-        puts "Extracting: `#{f.name}'"
+        puts "Extracting: `#{dest_path}/#{f.name}'"
         zip_file.extract(f, fpath)
       end
     end
