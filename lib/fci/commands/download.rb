@@ -6,22 +6,22 @@ command :download do |c|
   EOS
   c.default_value 'resources'
   c.arg_name 'dir'
-  c.flag [:resource_dir]
+  c.flag [:resources_dir]
 
   c.action do |global_options, options, args|
     language = 'all'
     tempfile = Tempfile.new(language)
     zipfile_name = tempfile.path
-    resource_dir = options[:resource_dir]
+    resources_dir = options[:resources_dir]
 
-    base_path = File.join(Dir.pwd, resource_dir)
+    base_path = File.join(Dir.pwd, resources_dir)
     begin
       export_translations!(@crowdin)
 
       puts 'Downloading translations'
       @crowdin.download_translation(language, output: zipfile_name)
 
-      base_path = File.join(Dir.pwd, resource_dir)
+      base_path = File.join(Dir.pwd, resources_dir)
       unzip_file_with_translations(zipfile_name, base_path)
     ensure
       tempfile.close
@@ -30,4 +30,3 @@ command :download do |c|
 
   end
 end
-

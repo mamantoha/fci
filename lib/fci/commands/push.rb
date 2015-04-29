@@ -6,16 +6,24 @@ command :push do |c|
   EOS
   c.default_value 'resources'
   c.arg_name 'dir'
-  c.flag [:resource_dir]
+  c.flag [:resources_dir]
+
+  c.desc 'Resources config file'
+  c.long_desc <<-EOS.strip_heredoc
+    This is the config file where the information about project's files will be store.
+  EOS
+  c.default_value 'resources/.resources.yml'
+  c.arg_name 'file'
+  c.flag [:resources_config]
 
   c.action do |global_options, options, args|
-    resource_dir = options[:resource_dir]
-    unless File.exists?(resource_dir)
-      FileUtils.mkdir(resource_dir)
+    resources_dir = options[:resources_dir]
+    unless File.exists?(resources_dir)
+      FileUtils.mkdir(resources_dir)
     end
-    config_file = '.config.yml'
+    resources_config_file = options[:resources_config]
 
-    File.open(config_file, 'a+') do |f|
+    File.open(resources_config_file, 'a+') do |f|
       config = YAML.load(f)
       unless config # config file empty
         config = {}
@@ -25,7 +33,7 @@ command :push do |c|
     end
 
     # for store information about folders/articles ids
-    config = YAML.load(File.open(config_file))
+    resources_config = YAML.load(File.open(resources_config_file))
 
     # Source Category
     source_category_id = @fci_config['freshdesk_category'].to_i
@@ -42,11 +50,11 @@ command :push do |c|
     folders.each do |folder|
       folder_xml = build_folder_xml(folder)
 
-      # write to config file
+      # write to resources config file
       unless folder_xml.nil?
-        config[:folders] = [] unless config[:folders]
-        unless config[:folders].detect { |f| f[:id] == folder.id }
-          config[:folders] << { id: folder.id }
+        resources_config[:folders] = [] unless resources_config[:folders]
+        unless resources_config[:folders].detect { |f| f[:id] == folder.id }
+          resources_config[:folders] << { id: folder.id }
         end
       end
 
@@ -64,8 +72,8 @@ command :push do |c|
       articles.each do |article|
         article_xml = build_article_xml(article)
 
-        # write to config file
-        if config_folder = config[:folders].detect { |f| f[:id] == folder.id }
+        # write to resources config file
+        if config_folder = resources_config[:folders].detect { |f| f[:id] == folder.id }
           (config_folder[:articles] ||= []) << { id: article.id }
         else
           abort 'No such folder!'
@@ -84,7 +92,7 @@ command :push do |c|
     folders_builder.each do |folder|
       file_name = "folder_#{folder[:id]}.xml"
 
-      o = File.new(File.join(resource_dir, file_name), 'w')
+      o = File.new(File.join(resources_dir, file_name), 'w')
       o.write folder[:xml].to_xml
       o.close
 
@@ -92,14 +100,14 @@ command :push do |c|
         puts "[Crowdin] Update file `#{file_name}`"
         @crowdin.update_file(
           files = [
-            { source: File.join(resource_dir, file_name), dest: file_name, export_pattert: '/%two_letters_code%/%original_file_name%' }
+            { source: File.join(resources_dir, file_name), dest: file_name, export_pattert: '/%two_letters_code%/%original_file_name%' }
           ], type: 'webxml'
         )
       else
         puts "[Crowdin] Add file `#{file_name}`"
         @crowdin.add_file(
           files = [
-            { source: File.join(resource_dir, file_name), dest: file_name, export_pattert: '/%two_letters_code%/%original_file_name%' }
+            { source: File.join(resources_dir, file_name), dest: file_name, export_pattert: '/%two_letters_code%/%original_file_name%' }
           ], type: 'webxml'
         )
       end
@@ -109,7 +117,7 @@ command :push do |c|
     articles_builder.each do |article|
       file_name = "article_#{article[:id]}.xml"
 
-      o = File.new(File.join(resource_dir, file_name), 'w')
+      o = File.new(File.join(resources_dir, file_name), 'w')
       o.write article[:xml].to_xml
       o.close
 
@@ -117,24 +125,24 @@ command :push do |c|
         puts "[Crowdin] Update file `#{file_name}`"
         @crowdin.update_file(
           files = [
-            { source: File.join(resource_dir, file_name), dest: file_name, export_pattert: '/%two_letters_code%/%original_file_name%' }
+            { source: File.join(resources_dir, file_name), dest: file_name, export_pattert: '/%two_letters_code%/%original_file_name%' }
           ], type: 'webxml'
         )
       else
         puts "[Crowdin] Add file `#{file_name}`"
         @crowdin.add_file(
           files = [
-            { source: File.join(resource_dir, file_name), dest: file_name, export_pattert: '/%two_letters_code%/%original_file_name%' }
+            { source: File.join(resources_dir, file_name), dest: file_name, export_pattert: '/%two_letters_code%/%original_file_name%' }
           ], type: 'webxml'
         )
 
       end
     end
 
-    # Write config file
+    # Write resources config file
     puts "Write config file"
-    File.open(config_file, 'w') do |f|
-      f.write config.to_yaml
+    File.open(resources_config_file, 'w') do |f|
+      f.write resources_config.to_yaml
     end
 
   end
