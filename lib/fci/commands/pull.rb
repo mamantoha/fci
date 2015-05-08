@@ -96,9 +96,11 @@ command :pull do |c|
 
             end
 
-            unless freshdesk_folder.attributes[:name] == folder[:name] || freshdesk_folder.attributes[:description] == folder[:description]
+            if freshdesk_folder.attributes[:name] != folder[:name] || freshdesk_folder.attributes[:description] != folder[:description]
               puts "[Freshdesk] Update existing Folder"
               freshdesk_folder.update!(name: folder[:name], description: folder[:description])
+            else
+              puts "[Freshdesk] Nothing to update. An existing Folder still the same."
             end
 
           else
@@ -156,13 +158,15 @@ command :pull do |c|
                 next
               end
 
-              unless freshdesk_article.attributes[:title] == article[:title] || freshdesk_article.attributes[:description] == article[:description]
+              if freshdesk_article.attributes[:title] != article[:title] || freshdesk_article.attributes[:description] != article[:description]
                 puts "[Freshdesk] Update existing Article"
 
                 freshdesk_article.update!(
                   title: article[:title],
                   description: article[:description]
                 )
+              else
+                puts "[Freshdesk] Nothing to update. An existing Article still the same."
               end
 
             else
