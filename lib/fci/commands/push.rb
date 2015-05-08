@@ -100,14 +100,24 @@ command :push do |c|
         puts "[Crowdin] Update file `#{file_name}`"
         @crowdin.update_file(
           files = [
-            { source: File.join(resources_dir, file_name), dest: file_name, export_pattert: '/%two_letters_code%/%original_file_name%' }
+            {
+              source: File.join(resources_dir, file_name),
+              dest: file_name,
+              export_pattert: '/%two_letters_code%/%original_file_name%',
+              title: folder[:name]
+            }
           ], type: 'webxml'
         )
       else
         puts "[Crowdin] Add file `#{file_name}`"
         @crowdin.add_file(
           files = [
-            { source: File.join(resources_dir, file_name), dest: file_name, export_pattert: '/%two_letters_code%/%original_file_name%' }
+            {
+              source: File.join(resources_dir, file_name),
+              dest: file_name,
+              export_pattert: '/%two_letters_code%/%original_file_name%',
+              title: folder[:name]
+            }
           ], type: 'webxml'
         )
       end
@@ -125,14 +135,24 @@ command :push do |c|
         puts "[Crowdin] Update file `#{file_name}`"
         @crowdin.update_file(
           files = [
-            { source: File.join(resources_dir, file_name), dest: file_name, export_pattert: '/%two_letters_code%/%original_file_name%' }
+            {
+              source: File.join(resources_dir, file_name),
+              dest: file_name,
+              export_pattert: '/%two_letters_code%/%original_file_name%',
+              title: article[:title]
+            }
           ], type: 'webxml'
         )
       else
         puts "[Crowdin] Add file `#{file_name}`"
         @crowdin.add_file(
           files = [
-            { source: File.join(resources_dir, file_name), dest: file_name, export_pattert: '/%two_letters_code%/%original_file_name%' }
+            {
+              source: File.join(resources_dir, file_name),
+              dest: file_name,
+              export_pattert: '/%two_letters_code%/%original_file_name%',
+              title: article[:title]
+            }
           ], type: 'webxml'
         )
 
