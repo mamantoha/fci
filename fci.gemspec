@@ -10,9 +10,9 @@ spec = Gem::Specification.new do |s|
   s.summary = 'Freshdesk and Crowdin integration Command Line Interface (CLI)'
   s.files = `git ls-files`.split("\n")
   s.require_paths << 'lib'
-  s.has_rdoc = true
-  s.extra_rdoc_files = ['README.rdoc','fci.rdoc']
-  s.rdoc_options << '--title' << 'fci' << '--main' << 'README.rdoc' << '-ri'
+  # s.has_rdoc = true
+  # s.extra_rdoc_files = ['README.rdoc','fci.rdoc']
+  # s.rdoc_options << '--title' << 'fci' << '--main' << 'README.rdoc' << '-ri'
   s.bindir = 'bin'
   s.executables << 'fci'
   s.add_runtime_dependency('nokogiri')
