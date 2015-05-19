@@ -17,11 +17,12 @@ command :'import:sources' do |c|
   c.flag [:resources_config]
 
   c.action do |global_options, options, args|
-    resources_dir = options[:resources_dir]
+    resources_dir = File.join(File.dirname(global_options[:config]), options[:resources_dir])
+    resources_config_file = File.join(File.dirname(global_options[:config]), options[:resources_config])
+
     unless File.exists?(resources_dir)
       FileUtils.mkdir(resources_dir)
     end
-    resources_config_file = options[:resources_config]
 
     File.open(resources_config_file, 'a+') do |f|
       config = YAML.load(f)
