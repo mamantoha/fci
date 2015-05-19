@@ -17,11 +17,11 @@ spec = Gem::Specification.new do |s|
   s.executables << 'fci'
   s.add_runtime_dependency('nokogiri')
   s.add_runtime_dependency('rubyzip')
-  s.add_runtime_dependency('byebug')
   s.add_runtime_dependency('crowdin-api')
   s.add_runtime_dependency('freshdesk_api')
+  s.add_runtime_dependency('gli','2.13.0')
   s.add_development_dependency('rake')
   s.add_development_dependency('rdoc')
   s.add_development_dependency('aruba')
-  s.add_runtime_dependency('gli','2.13.0')
+  s.add_development_dependency('byebug')
 end
