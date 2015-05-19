@@ -14,6 +14,8 @@ include FCI
 
 program_desc 'is a command line tool that allows you to manage and synchronize your Freshdesk localization with Crowdin project'
 
+sort_help :manually # help commands are ordered in the order declared
+
 version FCI::VERSION
 
 subcommand_option_handling :normal

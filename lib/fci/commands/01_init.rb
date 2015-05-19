@@ -3,7 +3,7 @@ desc 'Create a new FCI-based project'
 arg 'project_name'
 arg_name 'project_name'
 skips_pre
-command :init do |c|
+command :'init:project' do |c|
   c.desc 'Root dir of project'
   c.long_desc <<-EOS.strip_heredoc
     This is the directory where the project's directory will be made, so if you

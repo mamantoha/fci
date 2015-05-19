@@ -1,5 +1,5 @@
 desc 'Read folders/articles from Freshdesk and upload resource files to Crowdin'
-command :push do |c|
+command :'import:sources' do |c|
   c.desc 'Directory of resource files'
   c.long_desc <<-EOS.strip_heredoc
     This is the directory where the project's files will be store.

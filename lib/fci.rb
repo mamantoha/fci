@@ -9,6 +9,6 @@ require 'fci/version.rb'
 # you just need to require this one file in your bin file
 require 'fci/helpers.rb'
 require 'fci/init.rb'
-require 'fci/push.rb'
-require 'fci/pull.rb'
+require 'fci/import.rb'
 require 'fci/download.rb'
+require 'fci/export.rb'

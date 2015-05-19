@@ -49,17 +49,17 @@ VERSION
     0.0.1
 
 GLOBAL OPTIONS
-    -c, --config=<s> - Project-specific configuration file (default: /media/sda6/ruby/github/freshdesk/fci/fci.yml)
-    --help           - Show this message
-    -v, --verbose    - Be verbose
+    -c, --config=<s> - Project-specific configuration file (default: /home/user/project/fci.yml)
     --version        - Display the program version
+    -v, --verbose    - Be verbose
+    --help           - Show this message
 
 COMMANDS
-    download - Build and download latest translations from Crowdin
-    help     - Shows a list of commands or help for one command
-    init     - Create a new FCI-based project
-    pull     - Download translations from Crowdin and add/update folders/articles on Freshdesk
-    push     - Read from Freshdesk and upload to Crowdin
+    help                  - Shows a list of commands or help for one command
+    init:project          - Create a new FCI-based project
+    import:sources        - Read folders/articles from Freshdesk and upload resource files to Crowdin
+    download:translations - Build and download last exported translation resources from Crowdin
+    export:translations   - Add or update localized resource files(folders and articles) in Freshdesk
 ```
 
 ## Configuration

@@ -1,5 +1,5 @@
 desc 'Build and download last exported translation resources from Crowdin'
-command :download do |c|
+command :'download:translations' do |c|
   c.desc 'Directory of resource files'
   c.long_desc <<-EOS.strip_heredoc
     This is the directory where the project's files will be store.

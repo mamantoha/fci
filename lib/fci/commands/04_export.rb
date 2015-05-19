@@ -1,5 +1,5 @@
 desc 'Add or update localized resource files(folders and articles) in Freshdesk'
-command :pull do |c|
+command :'export:translations' do |c|
   c.desc 'Directory of resource files'
   c.long_desc <<-EOS.strip_heredoc
     This is the directory where the project's files will be store.
