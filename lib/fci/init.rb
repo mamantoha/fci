@@ -31,19 +31,28 @@ module FCI
 
   def mk_config(root_dir, project_name)
     config = <<-EOS.strip_heredoc
-      ---
-      # Crowdin API credentials
-      crowdin_project_id: '<%your-crowdin-project-id%>'
-      crowdin_api_key: '<%your-crowdin-api-key%>'
-      crowdin_base_url: 'https://api.crowdin.com'
+    ---
+    # Crowdin API credentials
+    crowdin_project_id: '<%your-crowdin-project-id%>'
+    crowdin_api_key: '<%your-crowdin-api-key%>'
+    crowdin_base_url: 'https://api.crowdin.com'
 
-      # Freshdesk API credentials
-      freshdesk_base_url: 'https://<%subdomain%>.freshdesk.com'
-      freshdesk_username: '<%your-freshdek-username%>'
-      freshdesk_password: '<%your-freshdesk-password%>'
+    # Freshdesk API credentials
+    freshdesk_base_url: 'https://<%subdomain%>.freshdesk.com'
+    freshdesk_username: '<%your-freshdek-username%>'
+    freshdesk_password: '<%your-freshdesk-password%>'
 
-      freshdesk_category: '<%freshdesk-category-id%>'
-
+    # Freshdesk catogories
+    categories:
+    - freshdesk_category: '<%freshdesk-category-id%>'
+      translations:
+        -
+          crowdin_language_code: '<%crowdin-two-letters-code%>'
+          freshdesk_category_id: '<%freshdesk-category-id%>'
+        -
+          crowdin_language_code: '<%crowdin-two-letters-code%>'
+          freshdesk_category_id: '<%freshdesk-category-id%>'
+    - freshdesk_category: '<%freshdesk-category-id%>'
       translations:
         -
           crowdin_language_code: '<%crowdin-two-letters-code%>'
