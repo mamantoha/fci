@@ -83,10 +83,10 @@ command :'import:sources' do |c|
           article_xml = build_article_xml(article)
 
           # write to resources config file
-          if config_folder = folders_config.detect { |f| f[:id] == folder.id }
-            config_folder[:articles] = [] unless config_folder[:articles]
-            unless config_folder[:articles].detect { |a| a[:id] == article.id }
-              config_folder[:articles] << { id: article.id }
+          if folder_config = folders_config.detect { |f| f[:id] == folder.id }
+            folder_config[:articles] = [] unless folder_config[:articles]
+            unless folder_config[:articles].detect { |a| a[:id] == article.id }
+              folder_config[:articles] << { id: article.id }
             end
           else
             abort 'No such folder!'

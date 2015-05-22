@@ -134,11 +134,11 @@ command :'export:translations' do |c|
               abort "No `#{lang['crowdin_language_code']}` translations for folder."
             end
 
-            if config_article = folder_config[:articles].detect { |f| f[:id].to_s == article[:id].to_s }
-              config_article[:translations] = [] unless config_article[:translations]
+            if article_config = folder_config[:articles].detect { |f| f[:id].to_s == article[:id].to_s }
+              article_config[:translations] = [] unless article_config[:translations]
 
               # if Article translation ID exists in config - update article on Freshdesk
-              if article_translation = config_article[:translations].detect { |t| t[:lang] == lang['crowdin_language_code'] }
+              if article_translation = article_config[:translations].detect { |t| t[:lang] == lang['crowdin_language_code'] }
                 freshdesk_article = FreshdeskAPI::SolutionArticle.find(
                   @freshdesk,
                   category_id: lang['freshdesk_category_id'].to_i,
@@ -149,7 +149,7 @@ command :'export:translations' do |c|
                 # Remove Article translation from config if it not found in Freshdesk
                 if freshdesk_article.nil?
                   puts "Remove undefined Article from config."
-                  config_article[:translations].delete_if { |tr| tr[:lang] == lang['crowdin_language_code'] }
+                  article_config[:translations].delete_if { |tr| tr[:lang] == lang['crowdin_language_code'] }
 
                   puts "[Freshdesk] Create new Article."
                   freshdesk_article = FreshdeskAPI::SolutionArticle.create!(
@@ -159,7 +159,7 @@ command :'export:translations' do |c|
                     title: article[:title],
                     description: article[:description]
                   )
-                  config_article[:translations] << { lang: lang['crowdin_language_code'], id: freshdesk_article.id }
+                  article_config[:translations] << { lang: lang['crowdin_language_code'], id: freshdesk_article.id }
                   next
                 end
 
@@ -190,7 +190,7 @@ command :'export:translations' do |c|
                   title: article[:title],
                   description: article[:description]
                 )
-                config_article[:translations] << { lang: lang['crowdin_language_code'], id: freshdesk_article.id }
+                article_config[:translations] << { lang: lang['crowdin_language_code'], id: freshdesk_article.id }
               end
             else
               abort "No such article!"
