@@ -68,24 +68,34 @@ The scaffold project that was created in ./todo comes with a `fci.yml` shell.
 
 ```
 ---
+# Crowdin API credentials
 crowdin_project_id: '<%your-crowdin-project-id%>'
 crowdin_api_key: '<%your-crowdin-api-key%>'
 crowdin_base_url: 'https://api.crowdin.com'
 
+# Freshdesk API credentials
 freshdesk_base_url: 'https://<%subdomain%>.freshdesk.com'
 freshdesk_username: '<%your-freshdek-username%>'
 freshdesk_password: '<%your-freshdesk-password%>'
 
-freshdesk_category: '<%category-id%>'
-
-translations:
-  -
-    crowdin_language_code: '<%crowdin-two-letters-code%>'
-    freshdesk_category_id: '<%freshdesk-category-id%>'
-  -
-    crowdin_language_code: '<%crowdin-two-letters-code%>'
-    freshdesk_category_id: '<%freshdesk-category-id%>'
-
+# Freshdesk catogories
+categories:
+- freshdesk_category: '<%freshdesk-category-id%>'
+  translations:
+    -
+      crowdin_language_code: '<%crowdin-two-letters-code%>'
+      freshdesk_category_id: '<%freshdesk-category-id%>'
+    -
+      crowdin_language_code: '<%crowdin-two-letters-code%>'
+      freshdesk_category_id: '<%freshdesk-category-id%>'
+- freshdesk_category: '<%freshdesk-category-id%>'
+  translations:
+    -
+      crowdin_language_code: '<%crowdin-two-letters-code%>'
+      freshdesk_category_id: '<%freshdesk-category-id%>'
+    -
+      crowdin_language_code: '<%crowdin-two-letters-code%>'
+      freshdesk_category_id: '<%freshdesk-category-id%>'
 ```
 
 ## Supported Rubies
