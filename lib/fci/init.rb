@@ -39,7 +39,7 @@ module FCI
 
     # Freshdesk API credentials
     freshdesk_base_url: 'https://<%subdomain%>.freshdesk.com'
-    freshdesk_username: '<%your-freshdek-username%>'
+    freshdesk_username: '<%your-freshdesk-username%>'
     freshdesk_password: '<%your-freshdesk-password%>'
 
     # Freshdesk catogories
