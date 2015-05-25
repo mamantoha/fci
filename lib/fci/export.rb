@@ -6,7 +6,7 @@ module FCI
     folder = {
       id: folder_xml[:id],
       name: folder_xml.xpath('name').text,
-      description: folder_xml.xpath('name').text,
+      description: folder_xml.xpath('description').text,
       position: folder_xml[:position],
     }
 
