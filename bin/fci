@@ -54,10 +54,10 @@ pre do |global, command, options, args|
     EOS
   end
 
-  @freshdesk = FreshdeskAPI::Client.new do |c|
-    c.base_url = @cli_config['freshdesk_base_url']
-    c.username = @cli_config['freshdesk_username']
-    c.password = @cli_config['freshdesk_password']
+  @freshdesk = FreshdeskAPI::Client.new do |config|
+    config.base_url = @cli_config['freshdesk_base_url']
+    config.username = @cli_config['freshdesk_username']
+    cconfig.password = @cli_config['freshdesk_password']
   end
 
   @crowdin = Crowdin::API.new(api_key: @cli_config['crowdin_api_key'], project_id: @cli_config['crowdin_project_id'], base_url: @cli_config['crowdin_base_url'])
