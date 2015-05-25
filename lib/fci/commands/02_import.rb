@@ -36,7 +36,7 @@ command :'import:sources' do |c|
     # for store information about categories/folders/articles ids
     resources_config = YAML.load(File.open(resources_config_file))
 
-    @fci_config['categories'].each do |category|
+    @cli_config['categories'].each do |category|
       # Source Category
       source_category_id = category['freshdesk_category'].to_i
 
@@ -172,6 +172,6 @@ command :'import:sources' do |c|
         f.write resources_config.to_yaml
       end
 
-    end # @fci_config['categories'].each
+    end # @cli_config['categories'].each
   end
 end

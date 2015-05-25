@@ -31,7 +31,7 @@ command :'export:translations' do |c|
       raise "Error! Resources config empty. First run `push` command."
     end
 
-    @fci_config['categories'].each do |category|
+    @cli_config['categories'].each do |category|
       category['translations'].each do |lang|
         folder_xml_files = Dir["#{resources_dir}/#{lang['crowdin_language_code']}/#{category['freshdesk_category']}/folder_*.xml"]
         article_xml_files = Dir["#{resources_dir}/#{lang['crowdin_language_code']}/#{category['freshdesk_category']}/article_*.xml"]
@@ -206,7 +206,7 @@ command :'export:translations' do |c|
         end
 
       end # category['translations'].each
-    end # @fci_config['categories'].each
+    end # @cli_config['categories'].each
 
   end
 end
