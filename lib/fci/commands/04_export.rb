@@ -37,7 +37,7 @@ command :'export:translations' do |c|
         article_xml_files = Dir["#{resources_dir}/#{lang['crowdin_language_code']}/#{category['freshdesk_category']}/article_*.xml"]
 
         unless freshdesk_category = FreshdeskAPI::SolutionCategory.find(@freshdesk, id: lang['freshdesk_category_id'].to_i)
-          raise "Not such Category for language `#{lang['crowdin_language_code']}`in Freshdesk. Please create new one and set `:freshdesk_category_id` in config file."
+          raise "Not such Category\##{lang['freshdesk_category_id']} for language `#{lang['crowdin_language_code']}` in Freshdesk. Please create new one and set `:freshdesk_category_id` in config file."
         end
 
         all_folders = []

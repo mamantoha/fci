@@ -58,9 +58,19 @@ pre do |global, command, options, args|
     config.base_url = @cli_config['freshdesk_base_url']
     config.username = @cli_config['freshdesk_username']
     config.password = @cli_config['freshdesk_password']
+
+    if global[:verbose]
+      require 'logger'
+      config.logger = Logger.new(STDOUT)
+    end
+  end
+
+  if global[:verbose]
+    Crowdin::API.log = Logger.new(STDOUT)
   end
 
   @crowdin = Crowdin::API.new(api_key: @cli_config['crowdin_api_key'], project_id: @cli_config['crowdin_project_id'], base_url: @cli_config['crowdin_base_url'])
+
 
   true
 end
