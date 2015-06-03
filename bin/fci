@@ -9,6 +9,8 @@ rescue LoadError
   exit 64
 end
 
+# GLI_DEBUG=true bundle exec bin/fci
+
 include GLI::App
 include FCI
 
@@ -54,6 +56,10 @@ pre do |global, command, options, args|
     EOS
   end
 
+  if global[:verbose]
+    ENV['GLI_DEBUG'] = 'true'
+  end
+
   @freshdesk = FreshdeskAPI::Client.new do |config|
     config.base_url = @cli_config['freshdesk_base_url']
     config.username = @cli_config['freshdesk_username']
@@ -70,7 +76,6 @@ pre do |global, command, options, args|
   end
 
   @crowdin = Crowdin::API.new(api_key: @cli_config['crowdin_api_key'], project_id: @cli_config['crowdin_project_id'], base_url: @cli_config['crowdin_base_url'])
-
 
   true
 end
