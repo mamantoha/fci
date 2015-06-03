@@ -5,7 +5,7 @@ require 'crowdin-api'
 require 'nokogiri'
 require 'zip'
 
-require 'byebug'
+# require 'byebug'
 
 # Add requires for other files you add to your project here, so
 # you just need to require this one file in your bin file
