@@ -29,7 +29,7 @@ The simplest way to get started is to create a scaffold project:
 > fci init todo
 ```
 
-A new ./todo directory is created containing the sample config `fci.yml`. View the basic output of the scaffold with:
+A new ./todo directory is created with sample config `fci.yml`. View the basic output of the scaffold with:
 
 ```
 > cd todo
@@ -58,7 +58,7 @@ COMMANDS
     help                  - Shows a list of commands or help for one command
     init:project          - Create a new FCI-based project
     import:sources        - Read folders/articles from Freshdesk and upload resource files to Crowdin
-    download:translations - Build and download last exported translation resources from Crowdin
+    download:translations - Build and download translation resources from Crowdin
     export:translations   - Add or update localized resource files(folders and articles) in Freshdesk
 ```
 
