@@ -22,7 +22,7 @@ command :'export:translations' do |c|
 
     # for store information about folders/articles ids
     unless File.exists?(resources_config_file)
-      raise "Error! Config file does not exist. First run `push` command."
+      raise "Error! Config file does not exist. First run `import:sources` command."
     end
 
     resources_config = YAML.load(File.open(resources_config_file))
@@ -33,11 +33,17 @@ command :'export:translations' do |c|
 
     @cli_config['categories'].each do |category|
       category['translations'].each do |lang|
+        unless freshdesk_category = FreshdeskAPI::SolutionCategory.find(@freshdesk, id: lang['freshdesk_category_id'].to_i)
+          puts "[WARNING] Not such Category\##{lang['freshdesk_category_id']} for language `#{lang['crowdin_language_code']}` in Freshdesk. Please create new one and set `:freshdesk_category_id` in config file."
+          next
+        end
+
         folder_xml_files = Dir["#{resources_dir}/#{lang['crowdin_language_code']}/#{category['freshdesk_category']}/folder_*.xml"]
         article_xml_files = Dir["#{resources_dir}/#{lang['crowdin_language_code']}/#{category['freshdesk_category']}/article_*.xml"]
 
-        unless freshdesk_category = FreshdeskAPI::SolutionCategory.find(@freshdesk, id: lang['freshdesk_category_id'].to_i)
-          raise "Not such Category\##{lang['freshdesk_category_id']} for language `#{lang['crowdin_language_code']}` in Freshdesk. Please create new one and set `:freshdesk_category_id` in config file."
+        if folder_xml_files.empty? && article_xml_files.empty?
+          puts "[WARNING] There are no translations for language `#{lang['crowdin_language_code']}`. First run `download:translations` command."
+          next
         end
 
         all_folders = []
@@ -46,18 +52,14 @@ command :'export:translations' do |c|
         # Read folders from XML files
         folder_xml_files.each do |file|
           folder_xml_file = File.read(file)
-
           folder = parse_folder_xml(folder_xml_file)
-
           all_folders << folder
         end
 
         # Read articles from XML filse
         article_xml_files.each do |file|
           article_xml_file = File.read(file)
-
           article = parse_article_xml(article_xml_file)
-
           all_articles << article
         end
 
@@ -81,10 +83,10 @@ command :'export:translations' do |c|
 
               # Remove Folder translation from config it it not found in Freshdesk
               if freshdesk_folder.nil?
-                puts "Remove undefined Folder from config."
+                puts "[INFO] Removing undefined Folder from config."
                 folder_config[:translations].delete_if { |tr| tr[:lang] == lang['crowdin_language_code'] }
 
-                puts "[Freshdesk] Create new Folder."
+                puts "[Freshdesk] Create new Folder `#{folder[:name]}` for language `#{lang['crowdin_language_code']}`."
                 freshdesk_folder = FreshdeskAPI::SolutionFolder.create!(
                   @freshdesk,
                   category_id: lang['freshdesk_category_id'].to_i,
@@ -100,11 +102,11 @@ command :'export:translations' do |c|
                 puts "[Freshdesk] Update existing Folder."
                 freshdesk_folder.update!(name: folder[:name], description: folder[:description])
               else
-                puts "[Freshdesk] Nothing to update. An existing Folder still the same."
+                puts "[Freshdesk] Nothing to update. An existing Folder\##{folder[:id]} still the same."
               end
             else
               # create new folder in Freshdesk and save id to config file
-              puts "[Freshdesk] Create new Folder."
+              puts "[Freshdesk] Create new Folder `#{folder[:name]}` for language `#{lang['crowdin_language_code']}`."
               freshdesk_folder = FreshdeskAPI::SolutionFolder.create!(
                 @freshdesk,
                 category_id: lang['freshdesk_category_id'].to_i,
@@ -120,7 +122,7 @@ command :'export:translations' do |c|
           end
         end # all_folders.each
 
-        puts "Write info about Folders localization for Category `#{freshdesk_category.id}` to config."
+        puts "[INFO] Write info about Folders localization for language `#{lang['crowdin_language_code']}` for Category\##{freshdesk_category.id} to config."
         File.open(resources_config_file, 'w') do |f|
           f.write resources_config.to_yaml
         end
@@ -148,7 +150,7 @@ command :'export:translations' do |c|
 
                 # Remove Article translation from config if it not found in Freshdesk
                 if freshdesk_article.nil?
-                  puts "Remove undefined Article from config."
+                  puts "[INFO] Removing undefined Article from config."
                   article_config[:translations].delete_if { |tr| tr[:lang] == lang['crowdin_language_code'] }
 
                   puts "[Freshdesk] Create new Article."
@@ -164,14 +166,14 @@ command :'export:translations' do |c|
                 end
 
                 if freshdesk_article.attributes[:title] != article[:title] || freshdesk_article.attributes[:description] != article[:description]
-                  puts "[Freshdesk] Update existing Article."
+                  puts "[Freshdesk] Update existing Article\##{article[:id]}."
 
                   freshdesk_article.update!(
                     title: article[:title],
                     description: article[:description]
                   )
                 else
-                  puts "[Freshdesk] Nothing to update. An existing Article still the same."
+                  puts "[Freshdesk] Nothing to update. An existing Article\##{article[:id]} still the same."
                 end
 
               else
@@ -200,7 +202,7 @@ command :'export:translations' do |c|
           end
         end # all_articles.each
 
-        puts "Write info about Articles localization for Category `#{freshdesk_category.id}` to config."
+        puts "[INFO] Write info about Articles localization for language `#{lang['crowdin_language_code']}` for Category\##{freshdesk_category.id} to config."
         File.open(resources_config_file, 'w') do |f|
           f.write resources_config.to_yaml
         end
