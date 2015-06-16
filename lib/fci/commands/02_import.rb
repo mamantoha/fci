@@ -52,7 +52,7 @@ command :'import:sources' do |c|
       end
 
       # Get category's folders in Freshdesk
-      puts "[Freshdesk] Get folders for Category with id #{source_category_id}"
+      puts "[Freshdesk] Get folders for Category\##{source_category_id}"
       folders = @freshdesk.solution_folders(category_id: source_category_id).all!
 
       folders_builder = []
@@ -76,7 +76,7 @@ command :'import:sources' do |c|
       # Get articles for each folder
       articles_builder = []
       folders.each do |folder|
-        puts "[Freshdesk] Get articles for Folder with id #{folder.id}"
+        puts "[Freshdesk] Get articles for Folder\##{folder.id}"
         articles = @freshdesk.solution_articles(category_id: source_category_id, folder_id: folder.id).all!
 
         articles.each do |article|
@@ -167,7 +167,7 @@ command :'import:sources' do |c|
       end
 
       # Write resources config file
-      puts "Write config file for Category with id `#{source_category_id}`"
+      puts "[INFO] Write config file for Category\##{source_category_id}"
       File.open(resources_config_file, 'w') do |f|
         f.write resources_config.to_yaml
       end
