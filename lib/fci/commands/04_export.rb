@@ -159,7 +159,8 @@ command :'export:translations' do |c|
                     category_id: lang['freshdesk_category_id'].to_i,
                     folder_id: folder_translation[:id],
                     title: article[:title],
-                    description: article[:description]
+                    description: article[:description],
+                    status: 2
                   )
                   article_config[:translations] << { lang: lang['crowdin_language_code'], id: freshdesk_article.id }
                   next
@@ -190,7 +191,8 @@ command :'export:translations' do |c|
                   category_id: lang['freshdesk_category_id'].to_i,
                   folder_id: folder_translation[:id],
                   title: article[:title],
-                  description: article[:description]
+                  description: article[:description],
+                  status: 2
                 )
                 article_config[:translations] << { lang: lang['crowdin_language_code'], id: freshdesk_article.id }
               end
