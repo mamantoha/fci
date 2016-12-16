@@ -55,7 +55,7 @@ GLOBAL OPTIONS
     --help           - Show this message
 
 COMMANDS
-    help                  - Shows a list of commands or help for one command
+    help                  - Shows a list of commands or help for particular command
     init:project          - Create a new FCI-based project
     import:sources        - Read folders/articles from Freshdesk and upload resource files to Crowdin
     download:translations - Build and download translation resources from Crowdin
