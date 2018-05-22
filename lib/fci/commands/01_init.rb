@@ -1,4 +1,6 @@
 
+# frozen_string_literal: true
+
 desc 'Create a new FCI-based project'
 arg 'project_name'
 arg_name 'project_name'
@@ -10,14 +12,12 @@ command :'init:project' do |c|
     specify a project name `foo` and the root dir of `.`, the directory
     `./foo` will be created
   EOS
-  c.flag :r, :root, :default_value => '.'
+  c.flag :r, :root, default_value: '.'
 
-  c.switch :force, :desc => 'Overwrite/ignore existing files and directories'
+  c.switch :force, desc: 'Overwrite/ignore existing files and directories'
 
-  c.action do |global_options, options, args|
-    if args.length < 1
-      raise 'You must specify the name of your project'
-    end
+  c.action do |_global_options, options, args|
+    raise 'You must specify the name of your project' if args.empty?
 
     root_dir = options[:root]
     force = options[:force]
@@ -26,4 +26,3 @@ command :'init:project' do |c|
     create_scaffold(root_dir, project_name, force)
   end
 end
-

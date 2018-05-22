@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 desc 'Build and download translation resources from Crowdin'
 command :'download:translations' do |c|
   c.desc 'Directory of resource files'
@@ -16,9 +18,8 @@ command :'download:translations' do |c|
   c.arg_name 'file'
   c.flag [:resources_config]
 
-  c.action do |global_options, options, args|
+  c.action do |global_options, options, _args|
     resources_dir = File.join(File.dirname(global_options[:config]), options[:resources_dir])
-    resources_config_file = File.join(File.dirname(global_options[:config]), options[:resources_config])
 
     language = 'all'
     tempfile = Tempfile.new(language)
@@ -35,6 +36,5 @@ command :'download:translations' do |c|
       tempfile.close
       tempfile.unlink # delete the tempfile
     end
-
   end
 end

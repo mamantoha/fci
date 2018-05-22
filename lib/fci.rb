@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'fci/version.rb'
 
 require 'freshdesk_api'

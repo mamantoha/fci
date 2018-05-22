@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 desc 'Read folders/articles from Freshdesk and upload resource files to Crowdin'
 command :'import:sources' do |c|
   c.desc 'Directory of resource files'
@@ -16,16 +18,14 @@ command :'import:sources' do |c|
   c.arg_name 'file'
   c.flag [:resources_config]
 
-  c.action do |global_options, options, args|
+  c.action do |global_options, options, _args|
     resources_dir = File.join(File.dirname(global_options[:config]), options[:resources_dir])
     resources_config_file = File.join(File.dirname(global_options[:config]), options[:resources_config])
 
-    unless File.exists?(resources_dir)
-      FileUtils.mkdir(resources_dir)
-    end
+    FileUtils.mkdir(resources_dir) unless File.exist?(resources_dir)
 
     File.open(resources_config_file, 'a+') do |f|
-      config = YAML.load(f)
+      config = YAML.safe_load(f)
       unless config # config file empty
         config = {}
         # initialize empty config file
@@ -34,7 +34,7 @@ command :'import:sources' do |c|
     end
 
     # for store information about categories/folders/articles ids
-    resources_config = YAML.load(File.open(resources_config_file))
+    resources_config = YAML.safe_load(File.open(resources_config_file))
 
     @cli_config['categories'].each do |category|
       # Source Category
@@ -45,11 +45,11 @@ command :'import:sources' do |c|
       raise('No such category') unless source_category.id == source_category_id
 
       # Check if Category exists in resources config
-      unless resources_config[source_category_id]
-        category_config = resources_config.merge!(source_category_id => {})[source_category_id]
-      else
-        category_config = resources_config[source_category_id]
-      end
+      category_config = if resources_config[source_category_id]
+                          resources_config[source_category_id]
+                        else
+                          resources_config.merge!(source_category_id => {})[source_category_id]
+                        end
 
       # Get category's folders in Freshdesk
       puts "[Freshdesk] Get folders for Category\##{source_category_id}"
@@ -68,7 +68,7 @@ command :'import:sources' do |c|
         end
 
         unless folder_xml.nil?
-          folders_builder << build_folder_hash(folder).merge({ xml: folder_xml })
+          folders_builder << build_folder_hash(folder).merge(xml: folder_xml)
         end
       end
 
@@ -83,7 +83,8 @@ command :'import:sources' do |c|
           article_xml = build_article_xml(article)
 
           # write to resources config file
-          if folder_config = folders_config.detect { |f| f[:id] == folder.id }
+          folder_config = folders_config.detect { |f| f[:id] == folder.id }
+          if folder_config
             folder_config[:articles] = [] unless folder_config[:articles]
             unless folder_config[:articles].detect { |a| a[:id] == article.id }
               folder_config[:articles] << { id: article.id }
@@ -93,7 +94,7 @@ command :'import:sources' do |c|
           end
 
           unless article_xml.nil?
-            articles_builder << build_article_hash(article).merge({ xml:  article_xml })
+            articles_builder << build_article_hash(article).merge(xml: article_xml)
           end
         end
       end
@@ -102,7 +103,7 @@ command :'import:sources' do |c|
       remote_project_tree = get_remote_files_hierarchy(crowdin_project_info['files'])
 
       resources_category_dir = File.join(resources_dir, source_category_id.to_s)
-      unless File.exists?(resources_category_dir)
+      unless File.exist?(resources_category_dir)
         FileUtils.mkdir(resources_category_dir)
       end
 
@@ -171,7 +172,6 @@ command :'import:sources' do |c|
       File.open(resources_config_file, 'w') do |f|
         f.write resources_config.to_yaml
       end
-
-    end # @cli_config['categories'].each
+    end
   end
 end
