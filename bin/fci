@@ -1,11 +1,14 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 require 'gli'
-begin # XXX: Remove this begin/rescue before distributing your app
-require 'fci'
+# Remove this begin/rescue before distributing your app
+begin
+  require 'fci'
 rescue LoadError
-  STDERR.puts "In development, you need to use `bundle exec bin/fci` to run your app"
-  STDERR.puts "At install-time, RubyGems will make sure lib, etc. are in the load path"
-  STDERR.puts "Feel free to remove this message from bin/fci now"
+  STDERR.puts 'In development, you need to use `bundle exec bin/fci` to run your app'
+  STDERR.puts 'At install-time, RubyGems will make sure lib, etc. are in the load path'
+  STDERR.puts 'Feel free to remove this message from bin/fci now'
   exit 64
 end
 
@@ -24,23 +27,23 @@ subcommand_option_handling :normal
 arguments :strict
 
 desc 'Be verbose'
-switch [:v, :verbose], negatable: false
+switch %i[v verbose], negatable: false
 
 desc 'Project-specific configuration file'
 default_value File.join(Dir.pwd, 'fci.yml')
 arg_name '<s>'
-flag [:c, :config]
+flag %i[c config]
 
 commands_from 'fci/commands'
 
-pre do |global, command, options, args|
+pre do |global, _command, _options, _args|
   # Pre logic here
   # Return true to proceed; false to abort and not call the
   # chosen command
   # Use skips_pre before a command to skip this block
   # on that command only
 
-  unless File.exists?(global[:config])
+  unless File.exist?(global[:config])
     exit_now! <<-EOS.strip_heredoc
       Can't find configuration file (default `fci.yml').
       Type `fci help` to know how to specify custom configuration file
@@ -49,16 +52,14 @@ pre do |global, command, options, args|
 
   # load project-specific configuration
   begin
-    @cli_config = YAML.load(File.read(global[:config])) || {}
+    @cli_config = YAML.safe_load(File.read(global[:config])) || {}
   rescue Psych::SyntaxError => err
     exit_now! <<-EOS
       Could not parse YAML: #{err.message}
     EOS
   end
 
-  if global[:verbose]
-    ENV['GLI_DEBUG'] = 'true'
-  end
+  ENV['GLI_DEBUG'] = 'true' if global[:verbose]
 
   @freshdesk = FreshdeskAPI::Client.new do |config|
     config.base_url = @cli_config['freshdesk_base_url']
@@ -71,22 +72,20 @@ pre do |global, command, options, args|
     end
   end
 
-  if global[:verbose]
-    Crowdin::API.log = Logger.new(STDOUT)
-  end
+  Crowdin::API.log = Logger.new(STDOUT) if global[:verbose]
 
   @crowdin = Crowdin::API.new(api_key: @cli_config['crowdin_api_key'], project_id: @cli_config['crowdin_project_id'], base_url: @cli_config['crowdin_base_url'])
 
   true
 end
 
-post do |global,command,options,args|
+post do |global, command, options, args|
   # Post logic here
   # Use skips_post before a command to skip this
   # block on that command only
 end
 
-on_error do |exception|
+on_error do |_exception|
   # Error logic here
   # return false to skip default error handling
   true

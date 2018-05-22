@@ -1,28 +1,25 @@
+# frozen_string_literal: true
+
 require 'fileutils'
 
 module FCI
   def create_scaffold(root_dir, project_name, force)
     dir = File.join(root_dir, project_name)
 
-    if mkdir(dir, force)
-      mk_config(root_dir, project_name)
-    end
+    mk_config(root_dir, project_name) if mkdir(dir, force)
   end
 
   def mkdir(dir, force)
     exists = false
-    if !force
-      if File.exist? dir
-        raise "#{dir} exists; use --force to override"
-        exists = true
-      end
+    unless force
+      raise "#{dir} exists; use --force to override" if File.exist?(dir)
     end
 
     if !exists
       puts "Creating dir #{dir}..."
       FileUtils.mkdir_p dir
     else
-      puts "Exiting..."
+      puts 'Exiting...'
       false
     end
 
